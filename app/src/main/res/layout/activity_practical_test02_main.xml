@@ -49,9 +49,9 @@
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp" />
+<!--    <Space-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="10dp" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -101,30 +101,49 @@
         android:columnCount="2">
 
         <EditText
-            android:id="@+id/city_edit_text"
+            android:id="@+id/request_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="5"
-            android:hint="@string/city"
+            android:hint="@string/request_type"
             android:layout_row="0"
             android:layout_column="0"/>
 
-        <Spinner
-            android:id="@+id/information_type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/information_types"
-            android:layout_row="1"
-            android:layout_column="0"/>
 
         <Button
             android:id="@+id/get_weather_forecast_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/get_weather_forecast"
+            android:text="@string/send_request"
             android:layout_row="0"
             android:layout_rowSpan="2"
+            android:layout_column="1"/>
+
+    </GridLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="2"
+        android:columnCount="2">
+
+        <EditText
+            android:id="@+id/key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:hint="@string/key"
+            android:layout_row="0"
+            android:layout_column="0"/>
+
+        <EditText
+            android:id="@+id/value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:hint="@string/value"
+            android:layout_row="0"
             android:layout_column="1"/>
 
     </GridLayout>

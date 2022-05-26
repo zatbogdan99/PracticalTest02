@@ -15,17 +15,19 @@ public class ClientThread extends Thread {
 
     private String address;
     private int port;
-    private String city;
-    private String informationType;
+    private String requestType;
+    private String cheie;
+    private String valoare;
     private TextView weatherForecastTextView;
 
     private Socket socket;
 
-    public ClientThread(String address, int port, String city, String informationType, TextView weatherForecastTextView) {
+    public ClientThread(String address, int port, String requestType, String cheie, String valoare, TextView weatherForecastTextView) {
         this.address = address;
         this.port = port;
-        this.city = city;
-        this.informationType = informationType;
+        this.requestType = requestType;
+        this.cheie = cheie;
+        this.valoare = valoare;
         this.weatherForecastTextView = weatherForecastTextView;
     }
 
@@ -43,9 +45,11 @@ public class ClientThread extends Thread {
                 Log.e(Constants.TAG, "[CLIENT THREAD] Buffered Reader / Print Writer are null!");
                 return;
             }
-            printWriter.println(city);
+            printWriter.println(requestType);
             printWriter.flush();
-            printWriter.println(informationType);
+            printWriter.println(cheie);
+            printWriter.flush();
+            printWriter.println(valoare);
             printWriter.flush();
             String weatherInformation;
             while ((weatherInformation = bufferedReader.readLine()) != null) {

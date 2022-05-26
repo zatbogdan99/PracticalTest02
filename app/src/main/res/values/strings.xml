@@ -6,9 +6,11 @@
     <string name="client">CLIENT</string>
     <string name="client_address">Address</string>
     <string name="client_port">Port</string>
-    <string name="city">City</string>
+    <string name="request_type">Request Type</string>
+    <string name="key">Cheie</string>
+    <string name="value">Valoare</string>
     <string name="information_type">Information Type</string>
-    <string name="get_weather_forecast">Get Weather Forecast</string>
+    <string name="send_request">Send request</string>
     <string-array name="information_types">
         <item>temperature</item>
         <item>wind_speed</item>
