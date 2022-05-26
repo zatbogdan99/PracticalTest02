@@ -1,10 +1,14 @@
 package ro.pub.cs.systems.eim.practicaltest02.network;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.HashMap;
 
 import cz.msebera.android.httpclient.client.ClientProtocolException;
@@ -17,7 +21,9 @@ public class ServerThread extends Thread {
     private ServerSocket serverSocket = null;
 
     private HashMap<String, String> data = null;
+    private LocalDateTime localDateTime = null;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public ServerThread(int port) {
         this.port = port;
         try {
@@ -49,6 +55,14 @@ public class ServerThread extends Thread {
 
     public synchronized void setData(String key, String value) {
         this.data.put(key, value);
+    }
+
+    public synchronized void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    public synchronized LocalDateTime getLocalDateTime() {
+        return localDateTime;
     }
 
     public synchronized HashMap<String, String> getData() {

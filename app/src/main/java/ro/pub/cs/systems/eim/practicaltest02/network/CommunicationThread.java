@@ -1,5 +1,7 @@
 package ro.pub.cs.systems.eim.practicaltest02.network;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +17,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +50,7 @@ public class CommunicationThread extends Thread {
         this.socket = socket;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void run() {
         if (socket == null) {
@@ -70,8 +75,24 @@ public class CommunicationThread extends Thread {
             HashMap<String, String> data = serverThread.getData();
 
             String valoare_citita = null;
+
+            HttpClient httpClient = new DefaultHttpClient();
+            String pageSourceCode = "";
+            HttpGet httpGet = new HttpGet(Constants.WEB_SERVICE_ADDRESS);
+            HttpResponse httpGetResponse = httpClient.execute(httpGet);
+            HttpEntity httpGetEntity = httpGetResponse.getEntity();
+            if (httpGetEntity != null) {
+                pageSourceCode = EntityUtils.toString(httpGetEntity);
+            }
+
+            JSONObject content = new JSONObject(pageSourceCode);
+
+            String dateTime = content.getString(Constants.DATE_TIME);
+            String dateTime2 = dateTime.substring(0, 26);
+            LocalDateTime localDateTime = LocalDateTime.parse(dateTime2);
+
             if (requestType.equals("get")) {
-                if (data.containsKey(cheie)) {
+                if (data.containsKey(cheie) && serverThread.getLocalDateTime().plusMinutes(1).isAfter(localDateTime)) {
                     Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the cache...");
                     printWriter.println(data.get(cheie));
                     printWriter.flush();
@@ -86,6 +107,31 @@ public class CommunicationThread extends Thread {
                     serverThread.setData(cheie, valoare);
                 }
                 Log.i(Constants.TAG, "valoare adaugata in hashmap");
+                serverThread.setLocalDateTime(localDateTime);
+
+//                JSONObject weather;
+//                String condition = "";
+//                for (int i = 0; i < weatherArray.length(); i++) {
+//                    weather = weatherArray.getJSONObject(i);
+//                    condition += weather.getString(Constants.MAIN) + " : " + weather.getString(Constants.DESCRIPTION);
+//
+//                    if (i < weatherArray.length() - 1) {
+//                        condition += ";";
+//                    }
+//                }
+//
+//                JSONObject main = content.getJSONObject(Constants.MAIN);
+//                String temperature = main.getString(Constants.TEMP);
+//                String pressure = main.getString(Constants.PRESSURE);
+//                String humidity = main.getString(Constants.HUMIDITY);
+//
+//                JSONObject wind = content.getJSONObject(Constants.WIND);
+//                String windSpeed = wind.getString(Constants.SPEED);
+//
+//                weatherForecastInformation = new WeatherForecastInformation(
+//                        temperature, windSpeed, condition, pressure, humidity
+//                );
+//                serverThread.setData(city, weatherForecastInformation);
             }
 
 
@@ -202,7 +248,7 @@ public class CommunicationThread extends Thread {
 //            }
 //            printWriter.println(result);
 //            printWriter.flush();
-        } catch (IOException ioException) {
+        } catch (IOException | JSONException ioException) {
             Log.e(Constants.TAG, "[COMMUNICATION THREAD] An exception has occurred: " + ioException.getMessage());
             if (Constants.DEBUG) {
                 ioException.printStackTrace();
